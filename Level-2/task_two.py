@@ -1,5 +1,7 @@
-from datetime import date
+'''level two: using polymorphism'''
 
+from datetime import date
+from abc import ABC, abstractmethod
 
 #####
 #
@@ -8,11 +10,85 @@ from datetime import date
 #####
 
 
+class Trainee:
+    '''handles trainee data'''
+
+    def __init__(self, name: str, email: str, date_of_birth: date):
+        self.name = name
+        self.email = email
+        self.date_of_birth = date_of_birth
+        self.assessments = []
+
+    def get_age(self) -> int:
+        '''returns the age of the trainee in years'''
+        days_in_year = 365
+        time_difference = date.today() - self.date_of_birth
+        age = (time_difference).days // days_in_year
+        return age
+
+    def add_assessment(self, assessment: Assessment) -> None:
+        '''appends assessment onto assessments list'''
+        if isinstance(assessment, Assessment) is False:
+            raise TypeError("You cannot input a non-assessment into the list")
+
+        self.assessments.append(assessment)
+
+    def get_assessment(self, name: str) -> Assessment | None:
+        '''returns assessment with the same name as inputted'''
+        for assessment in self.assessments:
+            if assessment.name == name:
+                return assessment
+        return None
+
+
+class Assessment(ABC):
+    '''handles the data for assessments'''
+
+    def __init__(self, name: str, score: float):
+        self._validate_score(score)
+        self.name = name
+        self.score = score
+
+    def _validate_score(self, score: float):
+        '''makes sure that the score is between 0 and 100'''
+        min_score = 0
+        max_score = 100
+        if score < min_score or score > max_score:
+            raise ValueError("Score must be between 0-100 inclusive")
+
+    @abstractmethod
+    def calculate_score(self):
+        '''returns the score based on a weighting'''
+
+
 #####
 #
 # COPY YOUR CODE FROM LEVEL 1 ABOVE
 #
 #####
+
+class MultipleChoiceAssessment(Assessment):
+    '''multiple choice question'''
+
+    def calculate_score(self):
+        '''returns the score, with a weighting of 70%'''
+        return self.score * 0.7
+
+
+class TechnicalAssessment(Assessment):
+    '''technical assessment'''
+
+    def calculate_score(self):
+        '''returns the score with a weighing of 100'''
+        return self.score
+
+
+class PresentationAssessment(Assessment):
+    '''presentation'''
+
+    def calculate_score(self):
+        '''returns the score with a weighting of 60%'''
+        return self.score * 0.6
 
 
 if __name__ == "__main__":
