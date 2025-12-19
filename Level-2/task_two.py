@@ -76,12 +76,12 @@ class Assessment(ABC):
     def calculate_score(self):
         '''returns the score based on a weighting'''
 
-
 #####
 #
 # COPY YOUR CODE FROM LEVEL 1 ABOVE
 #
 #####
+
 
 class MultipleChoiceAssessment(Assessment):
     '''multiple choice question'''
