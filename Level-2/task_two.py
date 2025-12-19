@@ -40,6 +40,22 @@ class Trainee:
                 return assessment
         return None
 
+    def get_assessment_of_type(self, type: str) -> list[Assessment]:
+        '''returns assessments that match the given type'''
+        types = {
+            "multiple-choice": MultipleChoiceAssessment,
+            "technical": TechnicalAssessment,
+            "presentation": PresentationAssessment
+        }
+        if type not in types:
+            return ValueError("Invalid Types")
+
+        assessments_of_type = [
+            assessment for assessment in self.assessments
+            if isinstance(assessment, types[type])]
+
+        return assessments_of_type
+
 
 class Assessment(ABC):
     '''handles the data for assessments'''
